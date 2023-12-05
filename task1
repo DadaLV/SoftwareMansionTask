@@ -1,0 +1,42 @@
+def is_prime(n)
+  return false if n <= 1
+  return true if n <= 3
+  return false if (n % 2 == 0) || (n % 3 == 0)
+  i = 5
+  while i * i <= n
+    return false if (n % i == 0) || (n % (i + 2) == 0)
+    i += 6
+  end
+  return true
+end
+
+def generate_p_values(sequence)
+  p_values = {}
+  counts = Hash.new(0)
+  sequence.each { |num| counts[num] += 1 }
+
+  counts.each do |num, count|
+    p_values[num] = count if is_prime(count)
+  end
+
+  p_values
+end
+
+def filter_sequence(a, b)
+  p_values = generate_p_values(b)
+  c = []
+  a.each do |num|
+    if p_values.key?(num) && p_values[num] > 0
+      p_values[num] -= 1
+    else
+      c.push(num)
+    end
+  end
+  c
+end
+
+
+A = [2, 3, 9, 2, 5, 1, 3, 7, 10]
+B = [2, 1, 3, 4, 3, 10, 6, 6, 1, 7, 10, 10, 10]
+C = filter_sequence(A, B)
+puts C.inspect
